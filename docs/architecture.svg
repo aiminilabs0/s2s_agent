@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="730" viewBox="0 0 1400 730" role="img" aria-labelledby="title description">
+  <title id="title">s2s-agent architecture</title>
+  <desc id="description">Microphone audio or a custom client streams PCM into a provider-neutral LiveSession. A provider adapter forwards it to a real-time speech API and normalizes responses into AudioEvent, TurnCompleteEvent, and InterruptedEvent values that flow back to the speaker or client.</desc>
+
+  <defs>
+    <radialGradient id="topGlow" cx="50%" cy="0%" r="70%">
+      <stop offset="0" stop-color="#ff851a" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#ff851a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="0%" r="90%">
+      <stop offset="0" stop-color="#ff851a" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ff851a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffa04c"/>
+      <stop offset="1" stop-color="#ff5e1a"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+    <marker id="arrowIn" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#e7ebef"/>
+    </marker>
+    <marker id="arrowOut" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#ff851a"/>
+    </marker>
+    <marker id="arrowDim" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse">
+      <path d="M0 0L9 4.5L0 9Z" fill="#5b6672"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="730" rx="20" fill="#0a0c0f"/>
+  <rect width="1400" height="730" rx="20" fill="url(#topGlow)"/>
+
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <!-- Header -->
+    <text x="48" y="58" fill="#ff851a" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12" letter-spacing="1.2">S2S-AGENT · ARCHITECTURE</text>
+    <text x="48" y="98" fill="#ffffff" font-size="30" font-weight="700" letter-spacing="-0.6">One session in the middle. <tspan fill="url(#accent)">Any provider behind it.</tspan></text>
+    <text x="48" y="128" fill="#8794a1" font-size="15">Applications exchange raw PCM and typed events with one provider-neutral session.</text>
+
+    <g transform="translate(1196 38)">
+      <rect x="3.5" y="4" width="13" height="12" rx="1.5" fill="#ff851a" fill-opacity="0.07" stroke="#ff8a29" stroke-width="1.1" transform="scale(1.6)"/>
+      <path d="M0.5 7h3M0.5 10h3M0.5 13h3M16.5 7h3M16.5 10h3M16.5 13h3" stroke="#ff8a29" stroke-width="0.9" stroke-linecap="round" transform="scale(1.6)"/>
+      <g fill="#ff9a3d" transform="scale(1.6)">
+        <rect x="5.5" y="8.75" width="1.4" height="2.5" rx="0.25"/>
+        <rect x="7.8" y="7.5" width="1.4" height="5" rx="0.25"/>
+        <rect x="10.1" y="8.25" width="1.4" height="3.5" rx="0.25"/>
+        <rect x="12.4" y="7.9" width="1.4" height="4.2" rx="0.25"/>
+      </g>
+      <text x="42" y="21" fill="#ffffff" font-size="15" font-weight="600">Idento Labs</text>
+    </g>
+
+    <!-- Default audio runner -->
+    <rect x="40" y="200" width="240" height="218" rx="12" fill="#11151a" stroke="#1d232b"/>
+    <text x="64" y="230" fill="#5b6672" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" letter-spacing="1">DEFAULT AUDIO RUNNER</text>
+
+    <circle cx="80" cy="272" r="20" fill="#0a0c0f" stroke="#2a323c"/>
+    <path d="M80 260a6 6 0 0 0-6 6v7a6 6 0 0 0 12 0v-7a6 6 0 0 0-6-6Zm-10 12v1a10 10 0 0 0 20 0v-1M80 283v5" fill="none" stroke="#e7ebef" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="112" y="268" fill="#ffffff" font-size="15" font-weight="600">Microphone</text>
+    <text x="112" y="288" fill="#8794a1" font-size="12">16 kHz PCM in</text>
+
+    <circle cx="80" cy="334" r="20" fill="#0a0c0f" stroke="rgba(255,133,26,0.5)"/>
+    <path d="M71 330h6l7-6v20l-7-6h-6Z M88 330c3 3 3 6 0 9M92 326c5 5 5 12 0 17" fill="none" stroke="#ff851a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="112" y="330" fill="#ffffff" font-size="15" font-weight="600">Speaker</text>
+    <text x="112" y="350" fill="#8794a1" font-size="12">PCM out</text>
+
+    <line x1="64" y1="374" x2="256" y2="374" stroke="#1d232b"/>
+    <text x="64" y="400" fill="#ffa04c" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">run() · run_async() · tasks</text>
+
+    <!-- Custom client -->
+    <rect x="40" y="440" width="240" height="160" rx="12" fill="none" stroke="#2a323c" stroke-dasharray="5 5"/>
+    <text x="64" y="470" fill="#5b6672" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" letter-spacing="1">CUSTOM CLIENT</text>
+    <text x="64" y="502" fill="#e7ebef" font-size="14">Files, media pipelines,</text>
+    <text x="64" y="522" fill="#e7ebef" font-size="14">or your own transport</text>
+    <text x="64" y="572" fill="#8794a1" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">async with agent as session</text>
+
+    <!-- SDK boundary -->
+    <rect x="330" y="180" width="500" height="420" rx="16" fill="#0e1115" stroke="#2a323c"/>
+    <text x="354" y="210" fill="#5b6672" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" letter-spacing="1">S2S-AGENT SDK</text>
+    <rect x="672" y="192" width="134" height="28" rx="6" fill="#11151a" stroke="#2a323c"/>
+    <text x="739" y="211" text-anchor="middle" fill="#e7ebef" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">create_agent()</text>
+
+    <!-- LiveSession core -->
+    <rect x="380" y="250" width="400" height="200" rx="14" fill="#ff851a" opacity="0.12" filter="url(#glow)"/>
+    <rect x="360" y="232" width="440" height="240" rx="12" fill="#151a20" stroke="rgba(255,133,26,0.6)" stroke-width="1.5"/>
+    <rect x="360" y="232" width="440" height="240" rx="12" fill="url(#coreGlow)"/>
+    <text x="388" y="276" fill="#ffffff" font-size="24" font-weight="700" letter-spacing="-0.4">LiveSession</text>
+    <text x="388" y="302" fill="#8794a1" font-size="13">provider-neutral lifecycle · validation · serialization</text>
+    <line x1="388" y1="322" x2="772" y2="322" stroke="rgba(255,133,26,0.25)"/>
+    <g font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="14" fill="#ffa04c">
+      <text x="388" y="356">send_audio(pcm)</text>
+      <text x="600" y="356">end_audio()</text>
+      <text x="388" y="388">events()</text>
+      <text x="600" y="388">close()</text>
+    </g>
+    <g font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12" fill="#e7ebef">
+      <rect x="388" y="414" width="100" height="30" rx="6" fill="#0a0c0f" stroke="#2a323c"/>
+      <text x="438" y="433" text-anchor="middle">LiveConfig</text>
+      <rect x="498" y="414" width="118" height="30" rx="6" fill="#0a0c0f" stroke="#2a323c"/>
+      <text x="557" y="433" text-anchor="middle">SessionState</text>
+    </g>
+
+    <!-- Session events -->
+    <text x="368" y="512" fill="#5b6672" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" letter-spacing="1">SESSION EVENTS</text>
+    <g font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12" fill="#e7ebef">
+      <rect x="368" y="526" width="112" height="32" rx="6" fill="#11151a" stroke="#2a323c"/>
+      <circle cx="384" cy="542" r="4" fill="#ff851a"/>
+      <text x="396" y="546">AudioEvent</text>
+      <rect x="490" y="526" width="160" height="32" rx="6" fill="#11151a" stroke="#2a323c"/>
+      <rect x="502" y="538" width="8" height="8" fill="#e7ebef"/>
+      <text x="518" y="546">TurnCompleteEvent</text>
+      <rect x="660" y="526" width="152" height="32" rx="6" fill="#11151a" stroke="#2a323c"/>
+      <rect x="673" y="538" width="7" height="7" fill="none" stroke="#e7ebef" stroke-width="1.6" transform="rotate(45 676.5 541.5)"/>
+      <text x="688" y="546">InterruptedEvent</text>
+    </g>
+
+    <!-- Provider adapter -->
+    <rect x="900" y="232" width="240" height="288" rx="12" fill="#11151a" stroke="#1d232b"/>
+    <text x="924" y="262" fill="#5b6672" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" letter-spacing="1">PROVIDER ADAPTER</text>
+    <text x="924" y="300" fill="#ffffff" font-size="18" font-weight="700">S2SProvider</text>
+    <text x="924" y="322" fill="#8794a1" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">name · connect(config)</text>
+    <path d="M1020 336v24" stroke="#5b6672" stroke-width="1.5" marker-end="url(#arrowDim)"/>
+    <text x="924" y="392" fill="#ffffff" font-size="18" font-weight="700">S2SConnection</text>
+    <text x="924" y="414" fill="#8794a1" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">send_audio · end_audio</text>
+    <text x="924" y="432" fill="#8794a1" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="12">events()</text>
+    <line x1="924" y1="452" x2="1116" y2="452" stroke="#1d232b"/>
+    <text x="924" y="478" fill="#ffa04c" font-size="13" font-weight="600">Any real-time S2S model</text>
+    <text x="924" y="498" fill="#8794a1" font-size="12">one adapter per provider</text>
+
+    <!-- Backend -->
+    <rect x="1200" y="282" width="160" height="200" rx="12" fill="#11151a" stroke="rgba(255,133,26,0.5)"/>
+    <circle cx="1280" cy="334" r="22" fill="#ff851a" opacity="0.25" filter="url(#glow)"/>
+    <path d="M1280 316l6 12 12 6-12 6-6 12-6-12-12-6 12-6Z" fill="url(#accent)"/>
+    <text x="1280" y="392" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Real-time</text>
+    <text x="1280" y="414" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">speech API</text>
+    <text x="1280" y="446" text-anchor="middle" fill="#8794a1" font-size="11">provider backend</text>
+
+    <!-- Audio in -->
+    <g stroke="#e7ebef" stroke-width="2" fill="none" marker-end="url(#arrowIn)">
+      <path d="M280 272H356"/>
+      <path d="M800 300H896"/>
+      <path d="M1140 330H1196"/>
+    </g>
+
+    <!-- Events and audio out -->
+    <g stroke="#ff851a" stroke-width="2" fill="none" marker-end="url(#arrowOut)">
+      <path d="M360 334H284"/>
+      <path d="M900 420H804"/>
+      <path d="M1200 430H1144"/>
+    </g>
+
+    <!-- Custom client path -->
+    <path d="M284 520H318V440H356" fill="none" stroke="#5b6672" stroke-width="1.5" stroke-dasharray="5 4" marker-start="url(#arrowDim)" marker-end="url(#arrowDim)"/>
+
+    <g font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11">
+      <rect x="814" y="270" width="72" height="20" rx="10" fill="#1d232b"/>
+      <text x="850" y="284" text-anchor="middle" fill="#e7ebef">PCM in</text>
+      <rect x="806" y="430" width="88" height="20" rx="10" fill="rgba(255,133,26,0.14)"/>
+      <text x="850" y="444" text-anchor="middle" fill="#ffa04c">events out</text>
+    </g>
+
+    <!-- Legend -->
+    <g font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, monospace" font-size="11" fill="#8794a1" letter-spacing="0.6">
+      <line x1="48" y1="668" x2="72" y2="668" stroke="#e7ebef" stroke-width="2"/>
+      <text x="82" y="672">AUDIO IN</text>
+      <line x1="178" y1="668" x2="202" y2="668" stroke="#ff851a" stroke-width="2"/>
+      <text x="212" y="672">NORMALIZED EVENTS + AUDIO OUT</text>
+      <line x1="452" y1="668" x2="476" y2="668" stroke="#5b6672" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="486" y="672">CUSTOM CLIENT PATH</text>
+    </g>
+    <text x="1352" y="672" text-anchor="end" fill="#5b6672" font-size="12">run() adds the default runner; custom clients use the session directly.</text>
+  </g>
+</svg>

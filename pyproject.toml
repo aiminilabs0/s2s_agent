@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "s2s-agent"
+version = "0.1.0"
+description = "An extensible async Python SDK for real-time speech-to-speech agents."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "s2s-agent contributors" }]
+keywords = ["audio", "gemini", "providers", "realtime", "speech-to-speech"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = [
+    "google-genai>=1.47.0,<2",
+]
+
+[project.optional-dependencies]
+audio = [
+    "pywebrtc-audio>=0.2.0,<1",
+    "sounddevice>=0.5.1,<1",
+]
+dev = [
+    "mypy>=1.18,<2",
+    "pytest>=8.4,<10",
+    "pytest-asyncio>=1.2,<2",
+    "ruff>=0.13,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/s2s_agent"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "RUF"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+warn_unreachable = true

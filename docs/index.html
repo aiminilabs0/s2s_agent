@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="s2s-agent is a small async Python SDK for real-time speech-to-speech agents."
+    />
+    <meta name="theme-color" content="#0a0c0f" />
+    <meta property="og:title" content="s2s-agent — Speech in. Speech out." />
+    <meta
+      property="og:description"
+      content="A small async Python SDK for real-time speech-to-speech agents. Stream audio, receive typed events, bring any provider."
+    />
+    <meta property="og:type" content="website" />
+    <title>Speech in. Speech out.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <nav class="nav shell" aria-label="Primary navigation">
+        <div class="brand">
+          <a class="brand-lab" href="https://identolabs.com/">
+            <span class="logo" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none">
+                <rect class="chip" x="3.5" y="4" width="13" height="12" rx="1.5" />
+                <path class="pins" d="M0.5 7h3M0.5 10h3M0.5 13h3M16.5 7h3M16.5 10h3M16.5 13h3" />
+                <rect class="bar" x="5.5" y="7" width="1.4" height="6" rx="0.25" />
+                <rect class="bar" x="7.8" y="7" width="1.4" height="6" rx="0.25" />
+                <rect class="bar" x="10.1" y="7" width="1.4" height="6" rx="0.25" />
+                <rect class="bar" x="12.4" y="7" width="1.4" height="6" rx="0.25" />
+              </svg>
+            </span>
+            Idento Labs
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="#usage">Usage</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#quickstart">Quickstart</a>
+        </div>
+        <a class="nav-github" href="https://github.com/aiminilabs0/s2s_agent">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.57 9.57 0 0 1 12 6.82c.85 0 1.7.11 2.5.34 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"
+            />
+          </svg>
+          GitHub
+        </a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero shell">
+        <h1>Speech in.<br /><em>Speech out.</em></h1>
+        <p class="lede">
+          A small async Python SDK for real-time speech-to-speech agents. Stream raw audio,
+          receive typed events, and swap providers without touching your application.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#quickstart">Get started</a>
+          <a class="button button-ghost" href="https://github.com/aiminilabs0/s2s_agent">
+            View source <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section shell" id="usage">
+        <div class="split">
+          <div class="split-copy">
+            <p class="kicker">01 — Usage</p>
+            <h2>One line to <em>talk</em>.</h2>
+            <p>
+              <code>run()</code> wires up the default microphone, speaker, connection, and
+              audio tasks. Drop down to the session API to stream PCM from files, media
+              pipelines, or your own transport.
+            </p>
+          </div>
+
+          <div class="code-card">
+            <div class="code-title">SDK Usage</div>
+            <pre><code><span class="k">from</span> s2s_agent <span class="k">import</span> create_agent
+
+agent = <span class="f">create_agent</span>(
+    <span class="p">model</span>=<span class="s">"your-s2s-model"</span>,
+    <span class="p">voice</span>=<span class="s">"model-voice"</span>,
+    <span class="p">instructions</span>=<span class="s">"You are a concise and friendly voice assistant."</span>,
+)
+agent.<span class="f">run</span>()  <span class="c"># talk until Ctrl+C</span></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-rule shell" id="architecture">
+        <p class="kicker">02 — Architecture</p>
+        <figure class="diagram">
+          <img
+            src="architecture.svg"
+            width="1400"
+            height="730"
+            alt="Audio flows from the microphone or a custom client into LiveSession, through a provider adapter to a real-time speech API, and returns as normalized events and audio."
+          />
+        </figure>
+      </section>
+
+      <section class="section section-rule shell" id="quickstart">
+        <div class="split">
+          <div class="split-copy">
+            <p class="kicker">03 — Quickstart</p>
+            <h2>Run the demo. <em>Start talking.</em></h2>
+            <p>
+              Clone the repository, install the audio extra, add a Gemini API key from
+              Google AI Studio, and start talking. Customize with <code>--model</code>,
+              <code>--voice</code>, and <code>--instructions</code>.
+            </p>
+          </div>
+
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span>zsh</span>
+              <button class="copy-button" type="button" data-copy="install-code">Copy</button>
+            </div>
+            <pre id="install-code"><code><span class="prompt">$ </span>git clone https://github.com/aiminilabs0/s2s_agent.git
+<span class="prompt">$ </span>cd s2s_agent
+<span class="prompt">$ </span>python -m pip install -e ".[audio]"
+<span class="prompt">$ </span>export GEMINI_API_KEY="your-api-key"
+<span class="prompt">$ </span>python examples/talk.py</code></pre>
+            <p class="terminal-out">Connecting. Speak into your microphone; press Ctrl+C to stop.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer shell">
+      <a class="brand-lab" href="https://identolabs.com/">
+        <img class="logo" src="favicon.svg" alt="" />
+        Idento Labs
+      </a>
+      <div class="footer-links">
+        <a href="https://github.com/aiminilabs0/s2s_agent/blob/main/docs/overview.md">Guide</a>
+        <a href="https://github.com/aiminilabs0/s2s_agent/tree/main/examples">Examples</a>
+        <a href="https://github.com/aiminilabs0/s2s_agent">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>
